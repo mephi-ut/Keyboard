@@ -22,7 +22,7 @@
 	margin: .1em;
 	cursor: pointer;
 	overflow: hidden;
-	line-height: 2em;
+	line-height: 1em;
 	-moz-user-focus: ignore;
 }
 .ui-keyboard-button span {
