@@ -1,6 +1,7 @@
 A jQuery on-screen keyboard (OSK) plugin that works in the browser. Originally posted by Jeremy Satterfield in his [blog](http://jsatt.blogspot.com/2010/01/on-screen-keyboard-widget-using-jquery.html), [jQuery plugins](http://plugins.jquery.com/project/virtual_keyboard) and on [Snipplr](http://snipplr.com/view/21577/virtual-keyboard-widget/). Currently maintained by [Mottie](https://github.com/Mottie/Keyboard).
 
 [![Bower Version][bower-image]][bower-url] [![NPM Version][npm-image]][npm-url] [![devDependency Status][david-dev-image]][david-dev-url] [![Join the chat at https://gitter.im/Mottie/Keyboard][gitter-image]][gitter]
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMottie%2FKeyboard.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FMottie%2FKeyboard?ref=badge_shield)
 
 ## Features ([Demo](http://mottie.github.com/Keyboard/))
 
@@ -21,6 +22,7 @@ A jQuery on-screen keyboard (OSK) plugin that works in the browser. Originally p
 
 ### Ease of setup
 
+* Attach a keyboard to inputs, textareas or contenteditable elements.
 * Add custom keyboard layouts easily.
 * Multiple region specific keyboard layouts included in a separate directory. This is a work in progress and slowly growing.
 * Add up to four standard key sets to each layout that use the shift and alt keys (default, shift, alt and alt-shift).
@@ -34,7 +36,7 @@ A jQuery on-screen keyboard (OSK) plugin that works in the browser. Originally p
 * Easily type in characters with diacritics. Here are some default combination examples:
     * `'` + vowel ( vowel with acute accent, e.g. `'` + `e` = `é` )
     * `` ` `` + vowel ( vowel with grave accent, e.g., `` ` `` + `e` = `è` )
-    * `"` + vowel ( vowel with diaeresis, e.g., `"` + `e` = `ë` )
+    * `"` + vowel ( vowel with diaresis, e.g., `"` + `e` = `ë` )
     * `^` + vowel ( vowel with circumflex accent, e.g., `^` + `e` = `ê` )
     * `~` + certain letters ( letter with tilde, e.g. `~` + `n` = `ñ`, `~` + `o` = `õ` )
 * Enable, disable or add more diacritic functionality as desired.
@@ -82,8 +84,13 @@ A jQuery on-screen keyboard (OSK) plugin that works in the browser. Originally p
 * Install using [npm](https://www.npmjs.com/) via `npm install virtual-keyboard`.
 * Use with:
   * [AngularJs](https://github.com/antonio-spinelli/ng-virtual-keyboard) by [antonio-spinelli](https://github.com/antonio-spinelli) via `bower install ng-virtual-keyboard`.
-  * [Ruby On Rails](https://github.com/scicasoft/virtual_keyboard) by [scicasoft](https://github.com/scicasoft) via `gem install virtual_keyboard`.
+  * [Ember](https://github.com/SleepyWerewolf/ember-virtual-keyboard) by [SleepyWerewolf](https://github.com/SleepyWerewolf).
   * [React.js](https://github.com/Utzel-Butzel/react-virtual-keyboard) by [Utzel-Butzel](https://github.com/Utzel-Butzel).
+  * [Ruby On Rails](https://github.com/scicasoft/virtual_keyboard) by [scicasoft](https://github.com/scicasoft) via `gem install virtual_keyboard`.
+
+## TypeScript
+
+You can use it with TypeScript. Install [TypeScript](https://www.typescriptlang.org/) and [@types/virtual-keyboard](https://www.npmjs.com/package/@types/virtual-keyboard) into dev dependencies for that.
 
 ## Documentation
 
@@ -92,21 +99,21 @@ Wiki: [Home](https://github.com/Mottie/Keyboard/wiki/Home) | [FAQ](https://githu
 ## To Do
 
 * Add an input mask extension. I think I'll try to make it compatible with [this plugin](https://github.com/RobinHerbots/jquery.inputmask).
-* Allow attaching a keyboard to a contenteditable element.
+* <del>Allow attaching a keyboard to a contenteditable element</del>. Added v1.27.0.
 
 ## Known Problems
 
-* This plugin currently supports input and textarea elements. It does not yet support content editable elements.
+* *ALL*: Only inputs of type "text", "search", "url", "telephone" and "password" <strong>support caret positioning</strong> ([ref](https://html.spec.whatwg.org/#do-not-apply)). Using this keyboard with any other input type will break  the caret left/right, backspace and delete keys (see [issue #241](https://github.com/Mottie/Keyboard/issues/241) for details).
 * *Mobile*: If the key press lags behind by one character, it is likely due to the mousewheel plugin. Disable it. See issues [#379](https://github.com/Mottie/Keyboard/issues/379) &amp; [#411](https://github.com/Mottie/Keyboard/issues/411).
 * *IE* and *Opera*:
     * In a text area with multiple carriage returns, the caret positioning will be off when repositioning it with the mouse.
     * Using the right and left arrow keys to navigate through a text area with multiple carriage returns is problematic. The caret doesn't behave like in other browsers when moving from one line to the next. You can always reposition the caret using the mouse.
 * *Opera*: When pressing the tab key while inside a textarea, all browsers but Opera add the tab to the virtual keyboard textarea.
-* *Safari*: See the QWERTY Text Area demo with a locked input. While using the virtual keyboard to type, it enters the text in backwards! This is because textareas with a "readonly" attribute always returns zero for the caret postion.
+* *Safari*: See the QWERTY Text Area demo with a locked input. While using the virtual keyboard to type, it enters the text in backwards! This is because textareas with a "readonly" attribute always returns zero for the caret position.
 * *Typing Extension*:
     * When pressing "Alt", the key set will change to the alt key set, but the focus will be moved to the browser menu. Pressing it quickly a second time will return the focus. This is built into the browser and it isn't possible (as far as I know) to automatically restore the window focus the first time alt is pressed.
     * Holding down the Alt key and trying to type is also not possible since the Windows OS is assuming you are trying to type a shortcut key to access the browser menu. You can still click the keys in the alt key set with the mouse.
-    * Simulated typing on the keyboard breaks when the CapLock is on. Still looking for a cross-browser solution.
+    * Simulated typing on the keyboard breaks when the CapsLock is on. Still looking for a cross-browser solution.
 
 ## Contributing
 
@@ -126,31 +133,40 @@ Wiki: [Home](https://github.com/Mottie/Keyboard/wiki/Home) | [FAQ](https://githu
 
 [npm-url]: https://npmjs.org/package/virtual-keyboard
 [npm-image]: https://img.shields.io/npm/v/virtual-keyboard.svg
-[david-dev-url]: https://david-dm.org/Mottie/keyboard#info=devDependencies
+[david-dev-url]: https://david-dm.org/Mottie/keyboard?type=dev
 [david-dev-image]: https://david-dm.org/Mottie/keyboard/dev-status.svg
 [bower-url]: http://bower.io/search/?q=keyboard
 [bower-image]: https://img.shields.io/bower/v/keyboard.svg
 [gitter-image]: https://badges.gitter.im/Join%20Chat.svg
 [gitter]: https://gitter.im/Mottie/Keyboard?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FMottie%2FKeyboard.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FMottie%2FKeyboard?ref=badge_large)
+
 ## Change Log
 
 Only the latest changes will be shown below, see the [wiki log](https://github.com/Mottie/Keyboard/wiki/Log) to view older versions.
 
-### Version 1.26.12 (1/11/2017)
+### Version 1.28.3 (2018-04-23)
 
 * Core:
-  * `enterNavigation` include virtual shift to switch input.
-  * Fix click to switch input in IE11. See [issue #138](https://github.com/Mottie/Keyboard/issues/138).
+  * Clear opening flag. Fixes [issue #668](https://github.com/Mottie/Keyboard/issues/668).
+* Meta:
+  * Update dependencies.
 
-### Version 1.26.11 (1/10/2017)
+### Version 1.28.2 (2018-04-19)
 
-* Core: fix function bypass before keyboard visible.
-  * This set the initial keyset to display block, shifting the extender layout.
-  * Toggle button will now properly update.
+* Core:
+  * Allow urls in display option. See [issue #555](https://github.com/Mottie/Keyboard/issues/555).
+* AltKeys:
+  * Switch to using `event.key`. Fixes [issue #664](https://github.com/Mottie/Keyboard/issues/664).
+  * Marked as breaking change (v2.0.0 of the extension) as this will only work in modern browsers.
 
-### Version 1.26.10 (1/8/2017)
+### Version 1.28.1 (2018-03-26)
 
-* Add Burmese language &amp; layout files. See [pull #507](https://github.com/Mottie/Keyboard/pull/507); thanks [@laminko](https://github.com/laminko)!
-* Update Burmese files.
-* Add Contributing & license files.
+* Core:
+  * Prevent double key action. Fixes [issue #659](https://github.com/Mottie/Keyboard/issues/659).
+  * Use hasClass instead of indexOf. Fixes [issue #660](https://github.com/Mottie/Keyboard/issues/660). See [pull #661](https://github.com/Mottie/Keyboard/pull/661); Thanks [@revgum](https://github.com/revgum)!
+* Meta:
+  * Remove lock files and update gitignore.
+  * Update authors list.

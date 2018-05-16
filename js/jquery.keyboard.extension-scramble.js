@@ -1,7 +1,7 @@
-/*
- * jQuery UI Virtual Keyboard Scramble Extension v1.6.2 for Keyboard v1.18+ (updated 11/28/2016)
+/*! jQuery UI Virtual Keyboard Scramble Extension v1.7.0 *//*
+ * for Keyboard v1.18+ (updated 3/15/2017)
  *
- * By Rob Garrison (aka Mottie & Fudgey)
+ * By Rob Garrison (aka Mottie)
  * Licensed under the MIT License
  *
  * Use this extension with the Virtual Keyboard to scramble the
@@ -22,8 +22,8 @@
  *   .addScramble();    // this keyboard extension
  *
  */
-/*jshint browser:true, jquery:true, unused:false */
-/*global require:false, define:false, module:false */
+/* jshint browser:true, jquery:true, unused:false */
+/* global require:false, define:false, module:false */
 ;(function(factory) {
 	if (typeof define === 'function' && define.amd) {
 		define(['jquery'], factory);
@@ -39,12 +39,22 @@ $.keyboard = $.keyboard || {};
 	$.fn.addScramble = function(options) {
 		//Set the default values, use comma to separate the settings, example:
 		var defaults = {
-			targetKeys    : /[a-z\d]/i, // keys to randomize
-			byRow         : true,  // randomize by row, otherwise randomize all keys
-			byKeySet      : false, // if true, randomize one keyset & duplicate
-			randomizeOnce : true,  // if true, randomize only once on keyboard visible
-			sameForAll    : false, // use the same scrambled keyboard for all targetted keyboards - not fully implemented!
-			init          : null   // function(keyboard){}
+			// keys to randomize
+			targetKeys     : /[a-z\d]/i,
+			// randomize by row, otherwise randomize all keys
+			byRow          : true,
+			// if true, randomize one keyset & duplicate
+			byKeySet       : false,
+			// if true, randomize only once on keyboard visible
+			randomizeOnce  : true,
+			// if true, randomize after user input;
+			// only `targetKeys` cause a new randomization
+			randomizeInput : false,
+			// initialization callback function
+			init           : null, // function(keyboard){}
+			// use the same scrambled keyboard for all targetted keyboards
+			// not fully implemented!
+			sameForAll     : false
 		};
 		return this.each(function() {
 			// make sure a keyboard is attached
@@ -194,12 +204,27 @@ $.keyboard = $.keyboard || {};
 
 				// clone, scramble then save layout
 				$.keyboard.builtLayouts[layout] = $.extend(true, {}, $.keyboard.builtLayouts[base.orig_layout]);
-				if (o.randomizeOnce) {
+				if ( o.randomizeOnce ) {
 					$.keyboard.builtLayouts[layout].$keyboard =
 						base.scramble_setup( $.keyboard.builtLayouts[base.orig_layout].$keyboard.clone() );
 				}
 				base.$keyboard = $.keyboard.builtLayouts[layout].$keyboard;
-				if ( !o.randomizeOnce ) {
+				// randomize after every input - see #522
+				if ( o.randomizeInput ) {
+					base.$el
+						.unbind($.keyboard.events.kbChange + namespace)
+						.bind($.keyboard.events.kbChange + namespace, function(e, kb) {
+							if ( o.targetKeys.test( kb.last.key ) ) {
+								// prevent hover class flash on previous key after scramble
+								kb.$keyboard
+									.find('.' + opts.css.buttonHover)
+									.removeClass(opts.css.buttonHover);
+								kb.$keyboard = kb.scramble_setup(kb.$keyboard);
+								// now make sure the key under the mouse is highlighted
+								$(document.elementFromPoint(e.clientX, e.clientY)).trigger('mouseenter');
+							}
+						});
+				} else if ( !o.randomizeOnce ) {
 					base.$el
 						.unbind($.keyboard.events.kbBeforeVisible + namespace)
 						.bind($.keyboard.events.kbBeforeVisible + namespace, function(e, kb) {
